@@ -1,0 +1,53 @@
+name: Sync Upstream
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Fetch upstream
+        run: |
+          git remote add upstream https://github.com/YoSoyVillaa/next-litebans.git
+          git fetch upstream main
+
+      - name: Count new commits
+        id: check
+        run: echo "count=$(git rev-list HEAD..upstream/main --count)" >> $GITHUB_OUTPUT
+
+      - name: Open sync PR
+        if: steps.check.outputs.count != '0'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr list --search "head:upstream-sync/" --state open --json number,headRefName \
+            --jq '.[].number' | xargs -r -I{} gh pr close {} --delete-branch
+
+          BRANCH="upstream-sync/$(date +%Y-%m-%d)"
+          git checkout -b "$BRANCH"
+          if ! git merge upstream/main --no-edit; then
+            git add -A
+            git commit -m "chore: sync upstream (conflicts need resolution)"
+          fi
+          git push origin "$BRANCH"
+          gh pr create \
+            --title "chore: sync ${{ steps.check.outputs.count }} upstream commit(s)" \
+            --body "Automated sync from [YoSoyVillaa/next-litebans](https://github.com/YoSoyVillaa/next-litebans)." \
+            --base main \
+            --head "$BRANCH"
