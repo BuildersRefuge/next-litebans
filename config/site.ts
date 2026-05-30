@@ -1,29 +1,29 @@
 export const siteConfig = {
-  title: "Next Litebans",
-  logo: "/logo.webp",
-  favicon: "/logo.webp",
+  title: process.env.NEXT_PUBLIC_SITE_TITLE || "Next Litebans",
+  logo: process.env.NEXT_PUBLIC_SITE_LOGO || "/logo.webp",
+  favicon: process.env.NEXT_PUBLIC_SITE_FAVICON || "/logo.webp",
   languages: {
     available: [
       "en",
       "es",
     ],
-    default: "en",
+    default: process.env.NEXT_PUBLIC_SITE_DEFAULT_LANGUAGE || "en",
   },
   console: {
-    name: "Console", // Just for filter badge
-    uuid: "[Console]", // Use for filter url and to check if a punishment is made from the Console. In some versions of Litebans, the console uuid is "CONSOLE".
-    icon: "/console.webp",
-    body: "/console-body.webp",
-    bust: "/console-bust.webp",
+    name: process.env.NEXT_PUBLIC_SITE_CONSOLE_NAME || "Console", // Just for filter badge
+    uuid: process.env.NEXT_PUBLIC_SITE_CONSOLE_UUID || "[Console]", // Use for filter url and to check if a punishment is made from the Console. In some versions of Litebans, the console uuid is "CONSOLE".
+    icon: process.env.NEXT_PUBLIC_SITE_CONSOLE_ICON || "/console.webp",
+    body: process.env.NEXT_PUBLIC_SITE_CONSOLE_BODY || "/console-body.webp",
+    bust: process.env.NEXT_PUBLIC_SITE_CONSOLE_BUST || "/console-bust.webp",
   },
-  defaultPlayerLookup: "YoSoyVilla",
+  defaultPlayerLookup: process.env.NEXT_PUBLIC_SITE_DEFAULT_PLAYER || "YoSoyVilla",
   // When enabled, body and bust images will show a steve skin
   bedrock: {
-    enabled: false,
-    prefix: "BP_",
+    enabled: process.env.NEXT_PUBLIC_SITE_BEDROCK_ENABLED === "true",
+    prefix: process.env.NEXT_PUBLIC_SITE_BEDROCK_PREFIX || "BP_",
   },
   openGraph: {
-    dateFormat: "yyyy-MM-dd hh:mm:ss",
+    dateFormat: process.env.NEXT_PUBLIC_SITE_OG_DATE_FORMAT || "yyyy-MM-dd hh:mm:ss",
     pages: {
       main: {
         // Placeholders: {total}, {bans}, {mutes}, {kicks}, {warns}

@@ -110,3 +110,47 @@ If your server allow Bedrock players through [Geyser](https://github.com/GeyserM
 
 > [!WARNING]
 > If you are using a special character for your Bedrock players, such as ``*.+?^${}()|[\]\\``, etc., you will need to enter ``src/utils/bedrock.ts``, and change the line 13 to ``const bedrockPrefixRegex = new RegExp(`^\\${siteConfig.bedrock.prefix}`);``, escaping the special character with a double backslash.
+
+### Docker
+
+All configuration is passed at runtime. The container builds the app on first start, then launches the server.
+
+```bash
+docker run -d \
+  -p 3000:3000 \
+  -e DATABASE_URL="mysql://user:password@host:3306/litebans" \
+  -e SITE_URL="https://bans.example.com" \
+  -e SITE_TITLE="My Server Bans" \
+  ghcr.io/buildersrefuge/next-litebans:latest
+```
+```yml
+litebans:
+  image: ghcr.io/buildersrefuge/next-litebans:latest
+  container_name: litebans
+  ports:
+    - 3000:3000
+  environment:
+    - DATABASE_URL=mysql://user:password@host:3306/litebans
+    - SITE_URL=https://bans.example.com
+    - SITE_TITLE=LiteBans
+```
+
+#### Environment variables
+
+| Variable                | Default               | Description                                                                  |
+|-------------------------|-----------------------|------------------------------------------------------------------------------|
+| `DATABASE_URL`          | —                     | **Required.** Database connection string (see [Database URL](#database-url)) |
+| `SITE_URL`              | —                     | **Required.** Public URL of your site, e.g. `https://bans.example.com`       |
+| `SITE_TITLE`            | `Next Litebans`       | Page title                                                                   |
+| `SITE_LOGO`             | `/logo.webp`          | Logo path or URL                                                             |
+| `SITE_FAVICON`          | `/logo.webp`          | Favicon path or URL                                                          |
+| `SITE_DEFAULT_LANGUAGE` | `en`                  | Default language code                                                        |
+| `SITE_DEFAULT_PLAYER`   | `YoSoyVilla`          | Default player for the lookup field                                          |
+| `SITE_CONSOLE_NAME`     | `Console`             | Console display name                                                         |
+| `SITE_CONSOLE_UUID`     | `[Console]`           | UUID string used to identify console punishments                             |
+| `SITE_CONSOLE_ICON`     | `/console.webp`       | Console icon image                                                           |
+| `SITE_CONSOLE_BODY`     | `/console-body.webp`  | Console body image                                                           |
+| `SITE_CONSOLE_BUST`     | `/console-bust.webp`  | Console bust image                                                           |
+| `SITE_BEDROCK_ENABLED`  | `false`               | Set to `true` to enable Bedrock compatibility                                |
+| `SITE_BEDROCK_PREFIX`   | `BP_`                 | Name prefix used by Bedrock players                                          |
+| `SITE_OG_DATE_FORMAT`   | `yyyy-MM-dd hh:mm:ss` | Date format in OpenGraph descriptions                                        |

@@ -1,0 +1,20 @@
+#!/bin/sh
+set -e
+
+export NEXT_PUBLIC_SITE_TITLE="${SITE_TITLE:-Next Litebans}"
+export NEXT_PUBLIC_SITE_LOGO="${SITE_LOGO:-/logo.webp}"
+export NEXT_PUBLIC_SITE_FAVICON="${SITE_FAVICON:-/logo.webp}"
+export NEXT_PUBLIC_SITE_DEFAULT_LANGUAGE="${SITE_DEFAULT_LANGUAGE:-en}"
+export NEXT_PUBLIC_SITE_DEFAULT_PLAYER="${SITE_DEFAULT_PLAYER:-YoSoyVilla}"
+export NEXT_PUBLIC_SITE_CONSOLE_NAME="${SITE_CONSOLE_NAME:-Console}"
+export NEXT_PUBLIC_SITE_CONSOLE_UUID="${SITE_CONSOLE_UUID:-[Console]}"
+export NEXT_PUBLIC_SITE_CONSOLE_ICON="${SITE_CONSOLE_ICON:-/console.webp}"
+export NEXT_PUBLIC_SITE_CONSOLE_BODY="${SITE_CONSOLE_BODY:-/console-body.webp}"
+export NEXT_PUBLIC_SITE_CONSOLE_BUST="${SITE_CONSOLE_BUST:-/console-bust.webp}"
+export NEXT_PUBLIC_SITE_BEDROCK_ENABLED="${SITE_BEDROCK_ENABLED:-false}"
+export NEXT_PUBLIC_SITE_BEDROCK_PREFIX="${SITE_BEDROCK_PREFIX:-BP_}"
+export NEXT_PUBLIC_SITE_OG_DATE_FORMAT="${SITE_OG_DATE_FORMAT:-yyyy-MM-dd hh:mm:ss}"
+
+npm run setup:db:generate
+npm run build
+exec node_modules/.bin/next start -H 0.0.0.0
